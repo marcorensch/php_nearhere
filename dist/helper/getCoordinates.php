@@ -4,7 +4,7 @@
 header('Content-Type: application/json');
 require('connection.php');
 
-if(isset($_POST['zipcode']) && strlen($_POST['zipcode']) > 3){
+if(isset($_POST['zipcode']) && is_numeric($_POST['zipcode'])){
 	$zip = $_POST['zipcode'];
 
 
