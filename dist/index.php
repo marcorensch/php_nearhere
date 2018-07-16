@@ -14,7 +14,36 @@
 
 	<script type="text/javascript">
 		jQuery(document).ready(function($){
+
 			$('#partnerlist').hide();
+			$('#nx-error').hide();
+
+			$('body').on('keyup','#userplz',function(){
+				var value = $(this).val();
+				numeric = checkNumeric(value);
+				if(numeric){
+					console.log('ok');
+					if(value > 999){
+						if($('#nx-error').is(":visible")){
+							$('#nx-error').slideUp('slow');
+							//$('#nx-error>span').html(''); 
+						};
+						console.log('Postleitzahl?');
+					}else{
+						console.log('zu kurz');
+						setTimeout(function(){
+							if($('#nx-error').is(":hidden")){
+								$('#nx-error>span').html('Eintrag zu kurz'); 
+								$('#nx-error').slideDown('slow');
+							} 
+						}, 50);
+					}
+
+				}else{
+					console.log('keine Nummer');
+				}
+				console.log(numeric);
+			});
 
 			$('#searchplz').click(function(){
 				$('#partnerlist').fadeOut('slow', function(){
@@ -26,6 +55,18 @@
 				
 				return false;
 			});
+
+			function checkNumeric(value){
+
+				if(isNaN(value)){
+					//console.log(value + " is not a number <br/>");
+					return false;
+				 }else{
+					//console.log(value + " is a number <br/>");
+					return true;
+				 }
+
+			}
 
 
 			function getCoordinates(plz){
@@ -149,7 +190,7 @@
 						    <fieldset class="uk-fieldset">
 						    	<div class="uk-child-width-1-2" uk-grid>
 							        <div class="uk-margin">
-							            <input id="userplz" class="uk-input" type="text" placeholder="Postleitzahl">
+							            <input id="userplz" class="uk-input" type="number" placeholder="Postleitzahl">
 							        </div>
 							        <div>
 							        	<button id="searchplz" class="uk-width-1-1 uk-button uk-button-default">Suchen</button>
@@ -157,6 +198,12 @@
 								</div>
 						    </fieldset>
 						</form>
+					</div>
+					<div class="uk-position-relative">
+						<div id="nx-error" class="uk-card uk-alert uk-alert-danger uk-margin-remove-bottom uk-margin-remove-top" style="min-height: 5em">
+							<!-- Error Meldung -->
+							<span></span>
+						</div>
 					</div>
 					<div class="uk-card uk-card-default uk-card-body" style="min-height: 25em">
 						<ul id="partnerlist" uk-accordion>
